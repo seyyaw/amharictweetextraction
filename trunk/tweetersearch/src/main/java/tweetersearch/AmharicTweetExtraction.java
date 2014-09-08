@@ -1,25 +1,27 @@
 package tweetersearch;
 
-import twitter4j.*;
-import twitter4j.auth.OAuth2Token;
-import twitter4j.conf.ConfigurationBuilder;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.Map;
-import java.util.StringTokenizer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.RateLimitStatus;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.OAuth2Token;
+import twitter4j.conf.ConfigurationBuilder;
 
 public class AmharicTweetExtraction
 {
@@ -27,8 +29,8 @@ public class AmharicTweetExtraction
     // Set this to your actual CONSUMER KEY and SECRET for your application as given to you by
     // dev.twitter.com
 
-    private static final String CONSUMER_KEY = "w4hESNxNtinR1pKEIaa4AjPq6";
-    private static final String CONSUMER_SECRET = "WQKPUdDk2jq0iL9LrEqrKQaMRbnTCXSSWoGC62RKoUS0IQDxTr";
+    private static final String CONSUMER_KEY = "XXX";
+    private static final String CONSUMER_SECRET = "XXX";
 
     // How many tweets to retrieve in every call to Twitter. 100 is the maximum allowed in the API
     private static final int TWEETS_PER_QUERY = 100;
@@ -37,7 +39,7 @@ public class AmharicTweetExtraction
 
     /**
      * Replace newlines and tabs in text with escaped versions to making printing cleaner
-     * 
+     *
      * @param text
      *            The text of a tweet, sometimes with embedded newlines and tabs
      * @return The text passed in, but with the newlines and tabs replaced
@@ -77,7 +79,7 @@ public class AmharicTweetExtraction
 
     /**
      * Get a fully application-authenticated Twitter object useful for making subsequent calls.
-     * 
+     *
      * @return Twitter4J Twitter object that's ready for API calls
      */
     public static Twitter getTwitter()
@@ -104,7 +106,7 @@ public class AmharicTweetExtraction
         throws NumberFormatException, IOException, SQLException, ClassNotFoundException
     {
         init();
-        
+
         OutputStream os = new FileOutputStream(new File("output"), true);
         int totalTweets = 0;
 
@@ -184,7 +186,7 @@ public class AmharicTweetExtraction
 
                     String dayFormat = new SimpleDateFormat("yyyy-MM-dd").format(s.getCreatedAt());
                     String time = new SimpleDateFormat("HH:mm:ss").format(s.getCreatedAt());
-                    
+
                     rs = statement.executeQuery("select id as id from tweet where id = " + maxID);
                     if (rs.first()) {
                         System.out.println(text + " is in db already");
