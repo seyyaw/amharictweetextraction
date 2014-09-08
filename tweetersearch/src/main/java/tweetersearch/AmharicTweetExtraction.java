@@ -20,19 +20,12 @@ import twitter4j.RateLimitStatus;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
-import twitter4j.auth.OAuth2Token;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class AmharicTweetExtraction
 {
 
-    // Set this to your actual CONSUMER KEY and SECRET for your application as given to you by
-    // dev.twitter.com
-
-    private static final String CONSUMER_KEY = "XXX";
-    private static final String CONSUMER_SECRET = "XXX";
-
-    // How many tweets to retrieve in every call to Twitter. 100 is the maximum allowed in the API
+       // How many tweets to retrieve in every call to Twitter. 100 is the maximum allowed in the API
     private static final int TWEETS_PER_QUERY = 100;
 
     private static final int MAX_QUERIES = 100;
@@ -54,29 +47,6 @@ public class AmharicTweetExtraction
         return text;
     }
 
-    public static OAuth2Token getOAuth2Token()
-    {
-
-        OAuth2Token token = null;
-        ConfigurationBuilder cb;
-
-        cb = new ConfigurationBuilder();
-        cb.setApplicationOnlyAuthEnabled(true);
-
-        cb.setOAuthConsumerKey(CONSUMER_KEY).setOAuthConsumerSecret(CONSUMER_SECRET);
-
-        try {
-            token = new TwitterFactory(cb.build()).getInstance().getOAuth2Token();
-        }
-        catch (Exception e) {
-            System.out.println("Could not get OAuth2 token");
-            e.printStackTrace();
-            System.exit(0);
-        }
-
-        return token;
-    }
-
     /**
      * Get a fully application-authenticated Twitter object useful for making subsequent calls.
      *
@@ -84,15 +54,11 @@ public class AmharicTweetExtraction
      */
     public static Twitter getTwitter()
     {
-        OAuth2Token token;
-
-        // First step, get a "bearer" token that can be used for our requests
-        token = getOAuth2Token();
         ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setOAuthConsumerKey("w4hESNxNtinR1pKEIaa4AjPq6");
-        cb.setOAuthConsumerSecret("WQKPUdDk2jq0iL9LrEqrKQaMRbnTCXSSWoGC62RKoUS0IQDxTr");
-        cb.setOAuthAccessToken("109802685-kXMNqDv8gLkT9ZscBVePxENZ9lTQ6KHr5e7cCtLt");
-        cb.setOAuthAccessTokenSecret("8PKYROS6pbu9zX9YXgXuaV3x281zeMP2OxjBMJMw9DVlT");
+        cb.setOAuthConsumerKey("KEY");
+        cb.setOAuthConsumerSecret("SECRET");
+        cb.setOAuthAccessToken("TOKEN");
+        cb.setOAuthAccessTokenSecret("ACCESS SECRET");
 
         // And create the Twitter object!
         return new TwitterFactory(cb.build()).getInstance();
@@ -225,7 +191,7 @@ public class AmharicTweetExtraction
         Class.forName("com.mysql.jdbc.Driver");
         // setup the connection with the DB.
         connect = DriverManager.getConnection("jdbc:mysql://localhost/amtweet?"
-                + "user=root&password=");
+                + "user=USER&password=PASSWORD");
 
         // statements allow to issue SQL queries to the database
         statement = connect.createStatement();
