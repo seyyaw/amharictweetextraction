@@ -2,7 +2,8 @@ package tweetersearch;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
@@ -13,8 +14,9 @@ public class Ngram {
 		String[] words = str.split(" ");
 		for (int i = 0; i < words.length - n + 1; i++) {
 			String ngram = concat(words, i, i + n).trim();
-			if (ngram.split(" ").length < 2)
-				continue;
+			if (ngram.split(" ").length < 2) {
+                continue;
+            }
 			if (ngrams.containsKey(ngram)) {
 				ngrams.put(ngram, ngrams.get(ngram) + 1);
 			} else {
@@ -26,25 +28,27 @@ public class Ngram {
 
 	public static String concat(String[] words, int start, int end) {
 		StringBuilder sb = new StringBuilder();
-		for (int i = start; i < end; i++)
-			sb.append((i > start ? " " : "") + words[i]);
+		for (int i = start; i < end; i++) {
+            sb.append((i > start ? " " : "") + words[i]);
+        }
 		return sb.toString();
 	}
 
 	public static void main(String[] args) throws IOException {
 		String tweet = FileUtils
-				.readFileToString(new File("/tmp/tweet.cleaned.txt")).trim()
+				.readFileToString(new File(args[0])).trim()
 				.replaceAll("\n", " ");
 		 tweet = normalize(tweet);
 		Map<String, Integer> ngramsMap = ngrams(3, tweet);
 		ngramsMap = WordFrequency.sortByComparator(ngramsMap, false);
 		StringBuffer sb = new StringBuffer();
 
-		for (String ngram : ngramsMap.keySet())
-			sb.append(ngram + "\t" + ngramsMap.get(ngram) + "\n");
+		for (String ngram : ngramsMap.keySet()) {
+            sb.append(ngram + "\t" + ngramsMap.get(ngram) + "\n");
+        }
 
 		FileUtils
-				.writeStringToFile(new File("/tmp/tweet.ngram"), sb.toString());
+				.writeStringToFile(new File(args[0]+".ngram"), sb.toString());
 	}
 
 	public static String normalize(String qwords) throws IOException {
